@@ -85,7 +85,7 @@ def main(argv):
 
 	cmd = '{adb} forward tcp:{targetPort} jdwp:{targetPid}'.format(adb=ADB, targetPort=targetPort, targetPid=pid)
 	print cmd
-	#print subprocess.check_output(cmd, shell=True)
+	print subprocess.check_output(cmd, shell=True)
 
 
 
