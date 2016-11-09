@@ -12,7 +12,7 @@ apk启动的Activity为`com.hackooo.example.biz.SplashActivity`.
 1. adb shell am start -D -S -W com.hackooo.example/.biz.SplashActivity
 2. 然后等待10s左右，告诉你已经超时了
 3. 接着 adb shell ps | grep com.hackooo.example 查看对应的进程的pid
-4. adb forward tcp:8800 jdwp:{pid,上一步的到的pid}
+4. adb forward tcp:8800 jdwp:{pid,上一步得到的pid}
 
 这几条命令虽然不是很复杂，但敲起来也得十几二十秒，关键是，在debug的时候，要一直重复，非常麻烦。
 好了，写个脚本搞定这些无聊的步骤。
