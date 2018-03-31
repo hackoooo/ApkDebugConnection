@@ -67,9 +67,9 @@ def main(argv):
 	print packageName
 	print lauchActivity
 	index = len(packageName)
-	lauch = lauchActivity[:index] + '/' + lauchActivity[index:]
+	lauch = packageName + '/' + lauchActivity
 
-	cmd = '{adb} shell am start -D -S -W {activity}'.format(adb=ADB, activity=lauch)
+	cmd = '{adb} shell am start -D -n  {activity}'.format(adb=ADB, activity=lauch)
 	print cmd
 	timeoutCmd = TimeoutCommand(cmd)
 	timeoutCmd.run(3)

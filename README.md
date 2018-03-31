@@ -1,23 +1,30 @@
 ####ApkDebugConnection
 
-一条命令搞定本地端口映射到设备中某个运行的apk的jdwp对应的端口。
+1. 启动设备中的 apk 并等待 debug.
+<br/>
+2. 一条命令搞定本地端口映射到设备中某个运行的apk的jdwp对应的端口。
+<br/>
 
 ####前言
-假设我们要debug的apk为 `com.hackooo.example.apk` , 
+假设我们要debug的apk为 `com.hackooo.example.apk` ,
 apk的packageName为`com.hackooo.example` ,
 apk启动的Activity为`com.hackooo.example.biz.SplashActivity`.
 
 在debug一些apk的时候，是不是已经厌倦了以下这些重复的步骤：
 
-1. adb shell am start -D -S -W com.hackooo.example/.biz.SplashActivity
-2. 然后等待10s左右，告诉你已经超时了
-3. 接着 adb shell ps | grep com.hackooo.example 查看对应的进程的pid
-4. adb forward tcp:8800 jdwp:{pid,上一步得到的pid}
+1. adb shell am start -D -n com.hackooo.example/.biz.SplashActivity
+2. 接着 adb shell ps | grep com.hackooo.example 查看对应的进程的pid
+3. adb forward tcp:8800 jdwp:{pid,上一步得到的pid} // 可选
 
 这几条命令虽然不是很复杂，但敲起来也得十几二十秒，关键是，在debug的时候，要一直重复，非常麻烦。
 好了，写个脚本搞定这些无聊的步骤。
 
 ####如何使用
+如果只需要把 apk 启动起来然后等待 debugger, 那么只需使用 debugApk.sh 即可(前提是 apk 已经安装了)
+1. 修改  debugApk.sh 中的配置项：
+
+debugApk xxx.apk
+
 首先修改配置文件 env.conf
 ```
 [config]
@@ -34,14 +41,3 @@ targetport = 8800
 对应到上面的例子，就是`./adbConnect.py com.hackooo.example.apk`
 
 接着就可以用你的Android Studio 连接端口痛快debug啦！
-
-####脚本的基本思路
-其实跟手动敲是一样的，只不过在启动应用的时候把超时改短一点，不用等太久。
-
-1. 拿到apk后，用aapt解析出apk的packageName和启动的Activity
-2. 执行`adb shell am start -D -S -W {activity}`  , 并加上3s的超时，不用等10s
-3. `adb shell ps | grep {packageName}` 拿到进程的pid
-4. `adb forward tcp:{targetport} jdwp:{pid}`
-
----
-有任何问题欢迎交流。
